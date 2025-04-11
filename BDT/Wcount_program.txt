@@ -1,0 +1,55 @@
+import java.io.*;
+import org.apache.hadoop.io.Text;
+import java.util.StringTokenizer;
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.mapreduce.Mapper;
+import org.apache.hadoop.mapreduce.Reducer;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+
+public class L1 {
+	
+	public static class M extends Mapper<Object,Text,Text,IntWritable>{
+		static IntWritable one =new IntWritable(1);
+		static Text word = new Text();
+		
+		public void map(Object key,Text val, Context c) throws IOException,InterruptedException{
+			StringTokenizer it = new StringTokenizer(val.toString());
+			while(it.hasMoreTokens()){
+				word.set(it.nextToken());
+				c.write(word, one);
+			}
+		}
+	}
+
+	public static class R extends Reducer<Text,IntWritable,Text,IntWritable>{
+		
+		public void reduce(Text val,Iterable<IntWritable> m, Context c) throws IOException, InterruptedException{
+			int sum=0;
+			for(IntWritable l : m){
+				sum+=l.get();
+			}
+			c.write(val, new IntWritable(sum));
+		}
+	}
+	public static void main(String[] args) throws Exception {
+		Configuration conf = new Configuration();
+		Job j =Job.getInstance(conf,"");
+		
+		j.setJarByClass(L1.class);
+		j.setMapperClass(M.class);
+		j.setReducerClass(R.class);
+		j.setCombinerClass(R.class);
+		
+		j.setOutputKeyClass(Text.class);
+		j.setOutputValueClass(IntWritable.class);
+		
+		FileInputFormat.addInputPath(j, new Path(args[0]));
+		FileOutputFormat.setOutputPath(j, new Path(args[1]));
+		
+		System.exit(j.waitForCompletion(true)?0:1);
+	}
+}
