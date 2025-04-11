@@ -1,0 +1,4 @@
+[cloudera@quickstart ~]$ hdfs dfs -mkdir /dir3
+[cloudera@quickstart ~]$ hdfs dfs -put /home/cloudera/g.txt /dir3/
+[cloudera@quickstart ~]$ hadoop jar /home/cloudera/vasu.jar WC1 /dir3/g.txt /output3/
+[cloudera@quickstart ~]$ hdfs dfs -cat /output3/part-r-00000

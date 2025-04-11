@@ -1,0 +1,12 @@
+[cloudera@quickstart ~]$ cat >vasu.txt
+hi
+hello
+gprec
+^C
+[cloudera@quickstart ~]$ hdfs dfs -mkdir /dir
+[cloudera@quickstart ~]$ hdfs dfs -put /home/cloudera/vasu.txt /dir/
+[cloudera@quickstart ~]$ hadoop jar /home/cloudera/vasu.jar WC1 /dir/vasu.txt /output
+[cloudera@quickstart ~]$ hdfs dfs -cat /output/part-r-00000
+gprec	1
+hello	1
+hi	1

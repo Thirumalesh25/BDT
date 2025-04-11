@@ -1,0 +1,49 @@
+SET PROPERTITES
+
+set hive.support.concurrency=true;
+set hive.enforce.bucketing=true;
+set hive.exec.dynamic.partition.mode=nonstrict;
+set hive.txn.manager=org.apache.hadoop.hive.ql.lockmgr.DbTxnManager;
+set hive.compactor.initiator.on=true;
+set hive.compactor.worker.threads=1;
+
+CREATE
+hive> create table emp (id int, name string, role string, sal int, place string) clustered by (id) into 2 buckets stored as orc TBLPROPERTIES('transactional'='true');
+
+OK
+Time taken: 0.056 seconds
+
+INSERT
+hive> insert into table emp values (1,'ram','prof',1000,'gtl'), (2,'sam','asos.prof',900,'knl'), (3,'seema', 'asist.prof',863,'gtl');
+
+hive> select * from emp;
+OK
+2	sam	asos.prof	900	knl
+3	seema	asist.prof	863	gtl
+1	ram	prof	1000	gtl
+Time taken: 0.083 seconds, Fetched: 3 row(s)
+hive> 
+
+UPDATE
+hive> update emp set name='sita' where id=2;
+hive> select * from emp;
+OK
+2	sita	asos.prof	900	knl
+3	seema	asist.prof	863	gtl
+1	ram	prof	1000	gtl
+Time taken: 0.085 seconds, Fetched: 3 row(s)
+
+DELETE
+hive> delete from emp where id=1;
+hive> select * from emp;
+OK
+2	sita	asos.prof	900	knl
+3	seema	asist.prof	863	gtl
+
+hive> delete from emp where role='asos.prof';
+hive> select * from emp;
+OK
+3	seema	asist.prof	863	gtl
+Time taken: 0.095 seconds, Fetched: 1 row(s)
+
+

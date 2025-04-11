@@ -1,0 +1,15 @@
+[cloudera@quickstart ~]$ hdfs dfs -mkdir /vas/
+[cloudera@quickstart ~]$ hdfs dfs -put /home/cloudera/vasu.txt /vas/
+[cloudera@quickstart ~]$ hdfs dfs -get /vas/vasu.txt /home/cloudera/
+[cloudera@quickstart ~]$ hdfs dfs -df /vas/vasu.txt
+Filesystem                              Size        Used    Available  Use%
+hdfs://quickstart.cloudera:8020  58531520512  1928306360  43541131264    3%
+[cloudera@quickstart ~]$ hdfs dfs -du /vas/vasu.txt
+15  15  /vas/vasu.txt
+[cloudera@quickstart ~]$ hdfs dfs -touchz /vas/b.txt
+[cloudera@quickstart ~]$ hdfs dfs -cat /vas/b.txt
+[cloudera@quickstart ~]$ hdfs dfs -ls /vas
+Found 2 items
+-rw-r--r--   1 cloudera supergroup          0 2025-04-11 04:53 /vas/b.txt
+-rw-r--r--   1 cloudera supergroup         15 2025-04-11 04:46 /vas/vasu.txt
+[cloudera@quickstart ~]$ 

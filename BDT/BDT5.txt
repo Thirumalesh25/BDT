@@ -1,0 +1,23 @@
+student1.txt
+
+1,John,22
+2,Jane,21
+3,Bob,23
+4,Alice,20
+
+
+
+d = load 'st1.txt' using PigStorage(',') as (id:int, name:chararray, age:int);
+describe d;
+
+d1 = foreach d generate name, age;
+dump d1;
+
+d2 = order d1 by age;
+dump d2;
+
+d3 = foreach d generate age, UPPER(name);
+DUMP d3;
+
+d4 = order d3 by age desc;
+dump d4;

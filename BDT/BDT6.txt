@@ -1,0 +1,58 @@
+s.txt :-->
+1,thiru,20
+2,ram,34
+3,dinu,33
+
+c.txt :-->
+1,english
+2,hindi
+3,telugu
+4,math
+5,chemistry
+
+l.txt :-->
+1,John,22
+2,Jane,21
+3,Bob,23
+4,Alice,22
+5,Charlie,21
+6,David,23
+
+
+<-- INNER JOIN -->
+d1 = load 's.txt' using PigStorage(',') as (id:int, name:chararray, age:int);
+d2 = load 'c.txt' using PigStorage(',') as (sid:int, cname:chararray);
+
+j1 = join s1 by id, s2 by sid;
+dump j1;
+
+
+<-- SELF JOIN -->
+d1 = load 's.txt' using PigStorage(',') as (id:int, name:chararray, age:int);
+d2 = load 's.txt' using PigStorage(',') as (id:int, cname:chararray, age:int);
+
+j2 = join d1 by age, d2 by age;
+dump j2;
+
+
+<-- UNION -->
+d1 = load 's.txt' using PigStorage(',') as (id:int, name:chararray, age:int);
+d2 = load 'c.txt' using PigStorage(',') as (sid:int, cname:chararray);
+
+u1 = join d1,d2;
+dump u1;
+
+
+<-- SORT -->
+d1 = load 'l.txt' using PigStorage(',') as (id:int, name:chararray, age:int);
+
+g1 = group d1 BY age;
+
+res = foreach g1 order by group desc;
+dump res;
+
+
+
+
+
+
